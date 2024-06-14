@@ -29,6 +29,14 @@ private:
 	UCameraComponent* CameraComponent;
 
 	float MoveInputValue;
+
+	UPROPERTY(EditAnywhere , meta = (AllowPrivateAccess = " true"))
+	float CrouchSpriteHeight = 40.0f;
+
+	const FVector DefaultSpriteOffset = FVector(25.0f , 0.0f , 18.0f);
+
+	FVector CrouchSpriteOffset;
+	
 	
 	UFUNCTION(BlueprintPure , Category = "Anim Parameters")
 	FORCEINLINE bool IsRunning() const{ return IsGrounded() && MoveInputValue != 0.0f; }
@@ -47,6 +55,10 @@ private:
 	
 	UFUNCTION(BlueprintCallable , Category = "Movement")
 	void Move(const float InputActionValue);
+	
+	virtual void Crouch(bool bClientSimulation) override;
+	
+	virtual void UnCrouch(bool bClientSimulation) override;
 	
 	UFUNCTION(BlueprintCallable , Category = "Movement")
 	FORCEINLINE void SetMoveInputValue(const float InValue) {MoveInputValue = InValue;}
