@@ -20,6 +20,8 @@ public:
 	AWarrior();
 
 	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaSeconds) override;
  
 private:
 	UPROPERTY(VisibleAnywhere , Category = "Components" , meta = (AllowPrivateAccess = "true"))
@@ -36,7 +38,15 @@ private:
 	const FVector DefaultSpriteOffset = FVector(25.0f , 0.0f , 18.0f);
 
 	FVector CrouchSpriteOffset;
-	
+
+	UPROPERTY(BlueprintReadOnly , Category = "Anim Parameters" , meta = (AllowPrivateAccess = "true"))
+	bool IsSliding;
+
+	UPROPERTY(EditAnywhere , Category = "Movement|Slide" , meta = (AllowPrivateAccess = "true"))
+	float SlideDuration = 0.5f;
+
+	UPROPERTY(EditAnywhere , Category = "Movement|Crouch" , meta = (AllowPrivateAccess = "true"))
+	float CrouchedSpriteHeight = 50.0f;
 	
 	UFUNCTION(BlueprintPure , Category = "Anim Parameters")
 	FORCEINLINE bool IsRunning() const{ return IsGrounded() && MoveInputValue != 0.0f; }
@@ -59,7 +69,14 @@ private:
 	virtual void Crouch(bool bClientSimulation) override;
 	
 	virtual void UnCrouch(bool bClientSimulation) override;
+
+	void Slide();
+
+	void StopSlide();
 	
 	UFUNCTION(BlueprintCallable , Category = "Movement")
 	FORCEINLINE void SetMoveInputValue(const float InValue) {MoveInputValue = InValue;}
+
+	UFUNCTION(BlueprintCallable , Category = "Movement")
+	void OnJumpInput();
 };

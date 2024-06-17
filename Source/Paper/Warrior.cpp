@@ -38,6 +38,16 @@ void AWarrior::BeginPlay()
 	CrouchSpriteOffset = FVector(DefaultSpriteOffset.X , DefaultSpriteOffset.Y , CrouchSpriteHeight);
 }
 
+void AWarrior::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if(IsSliding)
+	{
+		AddMovementInput(GetActorForwardVector());
+	}
+}
+
 bool AWarrior::IsGrounded() const
 {
 	return GetCharacterMovement()->IsMovingOnGround();
@@ -78,4 +88,27 @@ void AWarrior::UnCrouch(bool bClientSimulation)
 {
 	Super::UnCrouch(bClientSimulation);
 	GetSprite() -> SetRelativeLocation(DefaultSpriteOffset);
+}
+
+void AWarrior::Slide()
+{
+	IsSliding = true;
+
+	FTimerHandle SlideTimerHandle;
+	GetWorldTimerManager().SetTimer(SlideTimerHandle , this , &AWarrior::StopSlide , SlideDuration);
+}
+
+void AWarrior::StopSlide()
+{
+	IsSliding = false;
+}
+
+void AWarrior::OnJumpInput()
+{
+	if(bIsCrouched)
+	{
+		Slide();
+		return;
+	}
+	Jump();
 }
