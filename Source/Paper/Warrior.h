@@ -41,6 +41,9 @@ private:
 
 	UPROPERTY(BlueprintReadOnly , Category = "Anim Parameters" , meta = (AllowPrivateAccess = "true"))
 	bool IsSliding;
+	
+	UPROPERTY(BlueprintReadOnly , Category = "Anim Parameters" , meta = (AllowPrivateAccess = "true"))
+	bool IsJumping;
 
 	UPROPERTY(EditAnywhere , Category = "Movement|Slide" , meta = (AllowPrivateAccess = "true"))
 	float SlideDuration = 0.5f;
@@ -79,4 +82,7 @@ private:
 
 	UFUNCTION(BlueprintCallable , Category = "Movement")
 	void OnJumpInput();
+
+	UFUNCTION()
+	void OnCharacterLanded(const FHitResult& Hit);
 };

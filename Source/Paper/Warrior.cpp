@@ -36,6 +36,8 @@ void AWarrior::BeginPlay()
 	Super::BeginPlay();
 
 	CrouchSpriteOffset = FVector(DefaultSpriteOffset.X , DefaultSpriteOffset.Y , CrouchSpriteHeight);
+
+	LandedDelegate.AddDynamic(this , &AWarrior::OnCharacterLanded);
 }
 
 void AWarrior::Tick(float DeltaSeconds)
@@ -105,10 +107,19 @@ void AWarrior::StopSlide()
 
 void AWarrior::OnJumpInput()
 {
+	if(IsSliding) return;
+	
 	if(bIsCrouched)
 	{
 		Slide();
 		return;
 	}
 	Jump();
+
+	IsJumping = true;
+}
+
+void AWarrior::OnCharacterLanded(const FHitResult& Hit)
+{
+	IsJumping = false;
 }
